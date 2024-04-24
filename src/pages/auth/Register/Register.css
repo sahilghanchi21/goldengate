@@ -1,0 +1,161 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+:root {
+  --golden-color: #fafad2;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+body,
+input {
+  font-family: "Montserrat", sans-serif;
+}
+
+.box-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0rem 5rem;
+  overflow: hidden;
+}
+/* label {
+} */
+
+.title {
+  font-size: 2.2rem;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.input-field {
+  max-width: 380px;
+  width: 100%;
+  background-color: #f0f0f0;
+  margin: 10px 0;
+  height: 55px;
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: 100%;
+  padding: 0 0.4rem;
+  position: relative;
+}
+
+.input-field i {
+  text-align: center;
+  line-height: 55px;
+  color: #acacac;
+  transition: 0.5s;
+  font-size: 1.1rem;
+}
+
+.input-field input {
+  background: none;
+  outline: none;
+  border: none;
+  line-height: 1;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.input-option {
+  background: none;
+  outline: none;
+  border: none;
+  line-height: 1;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.input-field input::placeholder {
+  color: #aaa;
+  font-weight: 500;
+}
+
+.btn {
+  width: 150px;
+  background-color: #444444;
+  /* background-image: linear-gradient(-45deg, #9b870c 30%, #ffcc00 70%); */
+  border: none;
+  outline: none;
+  height: 49px;
+  border-radius: 4px;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.btn:hover {
+  background-color: #000;
+}
+
+/* Upload Image */
+
+/* Register.css */
+.box-container {
+  /* Your container styles */
+}
+
+.image-upload {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  border: 2px dashed #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.image-preview {
+  width: 50%;
+  height: 50%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  border: 5px #000 dotted;
+  border-radius: 50%;
+}
+
+@media (max-width: 870px) {
+  form {
+    padding: 0 1.5rem;
+  }
+  .box-container {
+    text-align: center;
+  }
+}
+@media (max-width: 570px) {
+  form {
+    padding: 0 1.5rem;
+  }
+  .box-container {
+    text-align: center;
+  }
+}

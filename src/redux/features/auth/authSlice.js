@@ -6,6 +6,7 @@ const initialState = {
   isLoggedIn: false,
   user: null,
   userData: null,
+  profileDetails: null,
   userProfileData: null,
   userProfileImage: null,
   userBackgroundImage: null,
@@ -41,24 +42,35 @@ export const register = createAsyncThunk(
 // Register profile
 export const registerProfile = createAsyncThunk(
   "auth/registerProfile",
-  async (userData, thunkApi) => {
+  async (profileDetails, thunkApi) => {
     try {
-      const response = await authService.registerProfile(userData);
-      // const user = response.data; // Assuming the response contains user information
-      // thunkApi.dispatch(updateUserInState(user)); // Dispatch action to update user in state
-      console.log(response, "registerProfiled rsponse");
-      return response.data;
+      const token = thunkApi.getState().auth.user.token ??  thunkApi.getState().auth.userData.token ; 
+      console.log(token,"tokennnnnnnnnn")// Get the token from the Redux store yaha nahi api call kar ne me but us se peh le token print karva ok
+      const response = await authService.registerProfile(profileDetails, token); // Pass the token to the authService function
+      return response.data; // Return the received profile details
     } catch (error) {
-      const errorMessage =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkApi.rejectWithValue(errorMessage);
+      return thunkApi.rejectWithValue(error.message);
     }
   }
 );
+// export const registerProfile = createAsyncThunk(
+//   "auth/registerProfile",
+//   async (profileDetails, thunkApi) => {
+//     try {
+//       const response = await authService.registerProfile(profileDetails);
+//       console.log(response, "registerProfiled rsponse");
+//       return response.data;
+//     } catch (error) {
+//       const errorMessage =
+//         (error.response &&
+//           error.response.data &&
+//           error.response.data.message) ||
+//         error.message ||
+//         error.toString();
+//       return thunkApi.rejectWithValue(errorMessage);
+//     }
+//   }
+// );
 
 // Login user
 export const login = createAsyncThunk(
@@ -239,16 +251,33 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isLoggedIn = true;
-        state.userProfileData = action.payload;
+        state.profileDetails = action.payload; // Update profileDetails with the received data
         toast.success("registerProfile successful");
       })
       .addCase(registerProfile.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+        state.isLoggedIn = false;
         state.message = action.payload;
-        state.userProfileData = null;
         toast.error(action.payload);
       })
+      // .addCase(registerProfile.pending, (state) => {
+      //   state.isLoading = true;
+      // })
+      // .addCase(registerProfile.fulfilled, (state, action) => {
+      //   state.isLoading = false;
+      //   state.isSuccess = true;
+      //   state.isLoggedIn = true;
+      //   state.profileDetails = action.payload;
+      //   toast.success("registerProfile successful");
+      // })
+      // .addCase(registerProfile.rejected, (state, action) => {
+      //   state.isLoading = false;
+      //   state.isError = true;
+      //   state.message = action.payload;
+      //   state.userProfileData = null;
+      //   toast.error(action.payload);
+      // })
       // Login User
       .addCase(login.pending, (state) => {
         state.isLoading = true;
@@ -263,6 +292,7 @@ const authSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+        state.isLoggedIn = false;
         state.message = action.payload;
         state.user = null;
         toast.error(action.payload);

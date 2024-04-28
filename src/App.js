@@ -8,8 +8,8 @@ function App() {
     <>
       <Router>
         <CustomRoutes />
-        <ToastContainer />
       </Router>
+      <ToastContainer />
     </>
   );
 }

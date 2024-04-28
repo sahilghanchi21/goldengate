@@ -2,29 +2,44 @@ import axios from "axios";
 
 const BACKEND_URL = process.env.REACT_APP_API;
 export const API_URL = `${BACKEND_URL}`;
-
 //Register user
 const register = async (userData) => {
   const response = await axios.post(
     API_URL + "/api/v1/auth/register",
     userData
-    
   );
   return response;
 };
 
-//Register profile
-const registerProfile = async (userData) => {
-  const response = await axios.post(API_URL + "/api/v1/profiles", userData, {
-    // withCredentials: true,
-  });
-  return response;
+// //Register profile
+// const registerProfile = async (userData) => {
+//   const response = await axios.post(API_URL + "/api/v1/profiles", userData, {
+//     withCredentials: true,
+//   });
+//   return response;
+// };
+const registerProfile = async (userData,token) => {
+  try {
+    const response = await axios.post(API_URL + "/api/v1/profiles", userData, {
+      headers: {
+        Authorization: `Bearer ${token}`, //ye token kaha si aaya or vo kaha se aaya // Include the token in the Authorization header
+      },
+    });
+    return response;
+  } catch (error) {
+    // Handle error here
+    console.error("Error registering profile:", error);
+    throw error; // Re-throw the error or handle it as per your requirement
+  }
 };
 
 //Login user
 const login = async (userData) => {
   console.log(userData, "login");
-  const response = await axios.post(API_URL + "/api/v1/auth/authenticate", userData);
+  const response = await axios.post(
+    API_URL + "/api/v1/auth/authenticate",
+    userData
+  );
   return response;
 };
 

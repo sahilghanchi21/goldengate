@@ -15,6 +15,8 @@ const Home = () => {
     setShowFullCaption(!showFullCaption);
   };
 
+  
+
   return (
     <Layout>
       <div className="home-container">

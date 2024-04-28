@@ -13,11 +13,20 @@ import Notifications from "../pages/notification/Notifications";
 import Business from "../pages/business/Business";
 import Profile from "../pages/profile/Profile";
 import GeminiChat from "../components/gemini";
+import ProtectedRoute from "./ProtectedRoute";
 const CustomRoutes = () => {
   return (
     <Routes>
       <Route path={AppRoutes.BASEURL} element={<Register title="Register" />} />
-      <Route path={AppRoutes.HOME} element={<Home title="Home" />} />
+      <Route
+        path={AppRoutes.HOME}
+        element={
+          <ProtectedRoute>
+            <Home title="Home" />
+          </ProtectedRoute>
+        }
+      />
+      {/* <ProtectedRoute path={AppRoutes.HOME} element={<Home title="Home" />} /> */}
       <Route path={AppRoutes.GEMINI} element={<GeminiChat title="Home" />} />
       <Route
         path={AppRoutes.REGISTER}
@@ -27,7 +36,11 @@ const CustomRoutes = () => {
       <Route path="/register" element={<Register />} /> */}
       <Route
         path={AppRoutes.REGISTERPROFILE}
-        element={<NameRegister title="Register-personal-details" />}
+        element={
+          <ProtectedRoute>
+            <NameRegister title="Register-personal-details" />
+          </ProtectedRoute>
+        }
       />
       <Route
         path={AppRoutes.REGISTERLOCATION}

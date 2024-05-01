@@ -11,6 +11,7 @@ export const AppRoutes = {
   MESSAGING: "/messaging",
   NOTIFICATIONS: "/notifications",
   FORBUSINESS: "/for-business",
-  PROFILE: "/profile",
+  PROFILE: "/profiles/me",
+  // PROFILE: "/profile",
   LOGIN: "/login",
 };

@@ -44,8 +44,10 @@ export const registerProfile = createAsyncThunk(
   "auth/registerProfile",
   async (profileDetails, thunkApi) => {
     try {
-      const token = thunkApi.getState().auth.user.token ??  thunkApi.getState().auth.userData.token ; 
-      console.log(token,"tokennnnnnnnnn")// Get the token from the Redux store yaha nahi api call kar ne me but us se peh le token print karva ok
+      const token =
+        thunkApi.getState().auth.user.token ??
+        thunkApi.getState().auth.userData.token;
+      console.log(token, "tokennnnnnnnnn"); // Get the token from the Redux store yaha nahi api call kar ne me but us se peh le token print karva ok
       const response = await authService.registerProfile(profileDetails, token); // Pass the token to the authService function
       return response.data; // Return the received profile details
     } catch (error) {

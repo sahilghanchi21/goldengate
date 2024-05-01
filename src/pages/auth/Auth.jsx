@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import Typewriter from '../../components/typeWriter/TypeWriter';
 import Header from '../../components/header/Header';
 import { beforeLogin, beforeRegister, login, register } from '../../redux/features/auth/authSlice';
+import axios from 'axios';
 const Auth = () => {
     const [isSignUpMode, setIsSignUpMode] = useState(false);
     const [registerData, setRegisterData] = useState({
@@ -16,7 +17,8 @@ const Auth = () => {
         confirmPassword: "", // New state for confirm password
     });
 
-   
+
+    const [profile, setProfile] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [usernameError, setUsernameError] = useState("");
     const [emailError, setEmailError] = useState("");
@@ -24,12 +26,39 @@ const Auth = () => {
         email: "",
         password: "",
     });
+    const userToken = useSelector((state) => state.auth.user?.token);
 
-    const profile = useSelector((state) => state.auth.userProfileData);
+    // const profile = useSelector((state) => state.auth.userProfileData);
     console.log(profile, "profile in login")
     const { isLoading, isLoggedIn, isSuccess } = useSelector(
         (state) => state.auth
     );
+
+
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                if (userToken) {
+
+                    const headers = {
+                        'Authorization': `Bearer ${userToken}`,
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+                    };
+                    const response = await axios.get('http://localhost:7173/api/v1/profiles/me', { headers });
+                    setProfile(response.data)
+                } else {
+                    navigate("/")
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchUserProfile();
+
+    }, [userToken]);
+
     useEffect(() => {
         // Check if the mode is stored in localStorage
         const storedMode = localStorage.getItem('authMode');
@@ -70,7 +99,7 @@ const Auth = () => {
 
     };
 
-    
+
     const handleRegisterSubmit = async (e) => {
         e.preventDefault();
 
@@ -109,7 +138,7 @@ const Auth = () => {
         };
 
         try {
-            dispatch(register(newRegisterData));
+            await dispatch(register(newRegisterData));
             navigate("/enter-personal-details");
         } catch (error) {
             console.log(error);
@@ -147,26 +176,6 @@ const Auth = () => {
         });
     };
 
-    // const handleLoginSubmit = async (e) => {
-    //     e.preventDefault();
-    //     const newLoginData = {
-    //         email: loginData.email,
-    //         password: loginData.password,
-    //     };
-
-    //     setRegisterData(newLoginData);
-    //     try {
-    //         console.log(newLoginData);
-    //         await dispatch(login(newLoginData));
-    //         navigate("/home"); // Uncomment this line to navigate to the home page after successful login
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    //     setRegisterData({
-    //         email: "",
-    //         password: "",
-    //     });
-    // };
 
     return (
         <>

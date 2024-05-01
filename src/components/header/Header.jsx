@@ -3,29 +3,46 @@ import './header.css';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserDetailsById } from '../../redux/features/auth/authSlice';
+import axios from 'axios';
 
 const Header = () => {
     const [isNavVisible, setIsNavVisible] = useState(false);
     const [activeLink, setActiveLink] = useState('');
-
-    const user = useSelector((state) => state.auth.user ?? state.auth.userData);
-
-    const userData = useSelector((state) => state.auth.userProfileData);
-    console.log(user, "user")
+    const [fetchedProfile, setFetchedProfile] = useState(null);
+    const user = useSelector((state) => state.auth.userPersonalInfo);
+    const userToken = useSelector((state) => state.auth.user.token);
+    // const userData = useSelector((state) => state.auth.userProfileData);
+    console.log(user, "user in header")
     // console.log(user.userId, "userId")
-    console.log(userData, "userData")
+    // console.log(userData, "userData")
 
     const dispatch = useDispatch()
 
 
 
 
-    // useEffect(() => {
-    //     if (userData.userId) {
-    //         console.log(userData.userId, "user id profile")
-    //         dispatch(fetchUserDetailsById(userData.userId));
-    //     }
-    // }, [user.userId]);
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                // Make a POST request to create a new profile
+                const headers = {
+                    'Authorization': `Bearer ${userToken}`,
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+                };
+                const response = await axios.get('http://localhost:7173/api/v1/profiles/me', { headers });
+                setFetchedProfile(response.data)
+                // dispatch(profilleInfoRegister(fetchedProfile))
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchUserProfile();
+
+    }, []);
+
+    console.log(fetchedProfile, "profile in header");
 
     const location = useLocation();
 
@@ -119,7 +136,7 @@ const Header = () => {
                 </nav>
                 <div className={`profile-nav ${isNavVisible ? 'profile-visible' : ''}`} >
                     <ul className="nav-links">
-                        <li><Link to={`/profile/${user?.userId}`} className={`nav-link ${activeLink === 'profile' ? 'active' : ''}`} onClick={() => handleLinkClick('profile')}>{user?.username}</Link></li>
+                        <li><Link to={`/profiles/me/${user?.user?.userId}`} className={`nav-link ${activeLink === 'profile' ? 'active' : ''}`} onClick={() => handleLinkClick('profile')}>{fetchedProfile?.fullName}</Link></li>
                     </ul>
                 </div>
             </div>

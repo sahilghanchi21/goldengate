@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import uploadImage from "../../../assets/Image upload-bro.png";
 import { convertToBase64 } from '../../../utils';
-import { registerProfile } from '../../../redux/features/auth/authSlice';
+import { profilleInfoRegister, registerProfile } from '../../../redux/features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -48,6 +48,32 @@ const UploadProfileImage = () => {
 
 
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     const newRegisterData = {
+    //         avatar: avatar,
+    //         backgroundImage: backgroundImage,
+    //         fullName: userInfo.fullName,
+    //         bio: userInfo.bio,
+    //         otherDetails: userInfo.otherDetails,
+    //         profileType: "User"
+    //     };
+    //     try {
+    //         console.log(newRegisterData, "Profile details")
+    //         // Use Axios to make a POST request
+    //         const headers = {
+    //             'Authorization': `Bearer ${userToken}`, "Access-Control-Allow-Origin": "*",
+    //             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+    //         }; // Change 'my-token' to your actual token
+    //         await axios.post('http://localhost:7173/api/v1/profiles', newRegisterData, { headers });
+    //         navigate("/home");
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    //     setBackgroundImage("");
+    //     setAvatar("");
+    // };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const newRegisterData = {
@@ -59,13 +85,18 @@ const UploadProfileImage = () => {
             profileType: "User"
         };
         try {
-            console.log(newRegisterData, "Profile details")
-            // Use Axios to make a POST request
+            // Make a POST request to create a new profile
             const headers = {
-                'Authorization': `Bearer ${userToken}`, "Access-Control-Allow-Origin": "*",
+                'Authorization': `Bearer ${userToken}`,
+                "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
-            }; // Change 'my-token' to your actual token
-            await axios.post('http://localhost:7173/api/v1/profiles', newRegisterData, { headers });
+            };
+            const response = await axios.post('http://localhost:7173/api/v1/profiles', newRegisterData, { headers });
+
+            // Dispatch an action to store the response in the Redux store
+            dispatch(profilleInfoRegister(response.data));
+
+            // Navigate to the home page after successful profile creation
             navigate("/home");
         } catch (error) {
             console.log(error);
@@ -74,28 +105,6 @@ const UploadProfileImage = () => {
         setAvatar("");
     };
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     const newRegisterData = {
-    //         avatar: avatar,
-    //         backgroundImage: backgroundImage,
-    //         fullName: userInfo.fullName,
-    //         bio: userInfo.bio,
-    //         otherDetails: userInfo.otherDetails,
-    //         profileType: "User"
-
-    //     };
-    //     try {
-    //         console.log(newRegisterData, "Profile details")
-    //         await dispatch(registerProfile(newRegisterData));
-    //         navigate("/home");
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    //     setBackgroundImage("");
-    //     setAvatar("");
-
-    // };
 
     return (
         <div className='box-container'>

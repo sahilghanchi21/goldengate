@@ -4,15 +4,17 @@ import Layout from '../../layout/Layout'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IoMdLogOut } from 'react-icons/io';
-import { clearUserData, fetchProfileDetailsById, fetchUserDetailsById, logout } from '../../redux/features/auth/authSlice';
+import { clearUserData, fetchProfileDetailsById, fetchUserDetailsById, logout, profilleInfoRegister } from '../../redux/features/auth/authSlice';
 import Skill from './skills/Skill';
+import axios from 'axios';
 
 const Profile = () => {
     const user = useSelector((state) => state.auth.user);
     // const profile = useSelector((state) => state.auth.userProfileData.data || state.auth.userProfileData);
     const [fetchedProfile, setFetchedProfile] = useState(null); // State to store fetched profile
     console.log(fetchedProfile, "fetchedProfile")
-    const { userId } = useParams();
+    const userToken = useSelector((state) => state.auth.user.token);
+    console.log(userToken, "userToken")
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -22,19 +24,26 @@ const Profile = () => {
     //     }
     // }, [dispatch, userId]);
 
-    // useEffect(() => {
-    //     const fetchUserProfile = async () => {
-    //         try {
-    //             const response = await dispatch(fetchProfileDetailsById(profile.profileId)); // Assuming you need to pass userId to fetch profile details
-    //             setFetchedProfile(response.payload); // Store the fetched profile in state
-    //         } catch (error) {
-    //             console.error("Failed to fetch profile details:", error);
-    //         }
-    //     };
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                // Make a POST request to create a new profile
+                const headers = {
+                    'Authorization': `Bearer ${userToken}`,
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+                };
+                const response = await axios.get('http://localhost:7173/api/v1/profiles/me', { headers });
+                setFetchedProfile(response.data)
+                dispatch(profilleInfoRegister(fetchedProfile))
+            } catch (error) {
+                console.log(error);
+            }
+        };
 
-    //     fetchUserProfile();
+        fetchUserProfile();
 
-    // }, [dispatch, profile.profileId]);
+    }, []);
 
     const handleLogOut = async () => {
         try {
@@ -59,17 +68,17 @@ const Profile = () => {
             <div className='main-profile-container'>
                 <section className='profile-container'>
                     <div className='banner-container'>
-                        <img className='banner-img' src="https://t4.ftcdn.net/jpg/02/71/29/75/360_F_271297554_0DAlzyFb8jzYg0lfmUOzyhtMer0orz4h.jpg" alt="banner" />
+                        <img className='banner-img' src={fetchedProfile?.backgroundImage} alt="banner" />
                     </div>
                     <div className='profile-img-container'>
-                        <img className="profile-img" src="https://images.pexels.com/photos/1547971/pexels-photo-1547971.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" />
+                        <img className="profile-img" src={fetchedProfile?.avatar} alt="" />
                     </div>
                     <div className='information-container'>
                         {fetchedProfile && (
                             <>
-                                <h1>{fetchedProfile.fullName}</h1>
-                                <h4 className='job-title'>{fetchedProfile.bio}</h4>
-                                <h6>{fetchedProfile.otherDetails}</h6>
+                                <h1>{fetchedProfile?.fullName}</h1>
+                                <h4 className='job-title'>{fetchedProfile?.bio}</h4>
+                                <h6>{fetchedProfile?.otherDetails}</h6>
                             </>
                         )}
                     </div>

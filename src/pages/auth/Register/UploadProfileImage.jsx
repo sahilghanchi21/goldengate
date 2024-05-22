@@ -48,32 +48,6 @@ const UploadProfileImage = () => {
 
 
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     const newRegisterData = {
-    //         avatar: avatar,
-    //         backgroundImage: backgroundImage,
-    //         fullName: userInfo.fullName,
-    //         bio: userInfo.bio,
-    //         otherDetails: userInfo.otherDetails,
-    //         profileType: "User"
-    //     };
-    //     try {
-    //         console.log(newRegisterData, "Profile details")
-    //         // Use Axios to make a POST request
-    //         const headers = {
-    //             'Authorization': `Bearer ${userToken}`, "Access-Control-Allow-Origin": "*",
-    //             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
-    //         }; // Change 'my-token' to your actual token
-    //         await axios.post('http://localhost:7173/api/v1/profiles', newRegisterData, { headers });
-    //         navigate("/home");
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    //     setBackgroundImage("");
-    //     setAvatar("");
-    // };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         const newRegisterData = {

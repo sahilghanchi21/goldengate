@@ -4,7 +4,7 @@ import { AppRoutes } from "./appRoutes";
 import Register from "../pages/auth/Auth";
 import Home from "../pages/home/Home";
 import NameRegister from "../pages/auth/Register/NameRegister";
-import LocationRegister from "../pages/auth/Register/LocationRegister";
+import LocationRegister from "../pages/auth/Register/UserSkills";
 import JonRegister from "../pages/auth/Register/JobRegister";
 import UploadProfileImage from "../pages/auth/Register/UploadProfileImage";
 import MyNetwork from "../pages/network/MyNetwork";
@@ -14,6 +14,7 @@ import Business from "../pages/business/Business";
 import Profile from "../pages/profile/Profile";
 import GeminiChat from "../components/gemini";
 import ProtectedRoute from "./ProtectedRoute";
+import Admin from "../admin";
 const CustomRoutes = () => {
   return (
     <Routes>
@@ -23,6 +24,14 @@ const CustomRoutes = () => {
         element={
           <ProtectedRoute>
             <Home title="Home" />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path={AppRoutes.ADMIN}
+        element={
+          <ProtectedRoute>
+            <Admin title="Admin-Dashboard" />
           </ProtectedRoute>
         }
       />

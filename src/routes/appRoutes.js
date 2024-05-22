@@ -4,7 +4,7 @@ export const AppRoutes = {
   REGISTER: "/auth",
   GEMINI: "/gemini",
   REGISTERPROFILE: "/enter-personal-details",
-  REGISTERLOCATION: "/enter-location",
+  REGISTERLOCATION: "/add-your-skills",
   REGISTEJOB: "/enter-job-title",
   UPLOADPROFILEIMAGE: "/upload-profile-image",
   MYNETWORK: "/my-network",
@@ -14,4 +14,7 @@ export const AppRoutes = {
   PROFILE: "/profiles/me",
   // PROFILE: "/profile",
   LOGIN: "/login",
+
+
+  ADMIN:"/admin-dashboard"
 };

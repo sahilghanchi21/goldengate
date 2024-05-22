@@ -52,12 +52,16 @@
 }
 
 .post-input {
-  width: 100%;
+  width: 50%;
   padding: 10px;
   margin-bottom: 10px;
   resize: none;
   height: 300px;
   border: none;
+}
+
+.image-preview-container {
+  width: 50%;
 }
 
 .post-options {
@@ -265,6 +269,11 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 10px;
+}
+
+.post-content-container {
+  width: 100%;
+  display: flex;
 }
 
 .post-card-content {

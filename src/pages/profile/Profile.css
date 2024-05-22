@@ -2,7 +2,7 @@
   width: 100%;
   height: auto;
   padding: 35px 50px;
-  /* background: #ffd700; */
+  background: #212121;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -14,6 +14,7 @@
   width: 100%;
   border: 1px solid black;
   border-radius: 10px;
+  background: #fff;
 }
 
 .banner-container {
@@ -37,6 +38,17 @@
   position: absolute;
   top: 190px;
   left: 115px;
+}
+
+@media (max-width: 768px) {
+  .profile-img-container {
+    height: 180px;
+    width: 180px;
+    border-radius: 50%;
+    position: absolute;
+    top: 127px;
+    left: 103px;
+  }
 }
 
 .profile-img {
@@ -70,4 +82,11 @@
 
 .logout-btn {
   cursor: pointer;
+}
+
+.posts-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

@@ -18,7 +18,7 @@ const Auth = () => {
     });
 
 
-    const [profile, setProfile] = useState("");
+    const [fetchedProfile, setFetchedProfile] = useState(null);
     const [passwordError, setPasswordError] = useState("");
     const [usernameError, setUsernameError] = useState("");
     const [emailError, setEmailError] = useState("");
@@ -29,27 +29,24 @@ const Auth = () => {
     const userToken = useSelector((state) => state.auth.user?.token);
 
     // const profile = useSelector((state) => state.auth.userProfileData);
-    console.log(profile, "profile in login")
-    const { isLoading, isLoggedIn, isSuccess } = useSelector(
-        (state) => state.auth
-    );
-
+    // const { isLoading, isLoggedIn, isSuccess } = useSelector(
+    //     (state) => state.auth
+    // );
+    const { user, userProfileData, isLoading, isLoggedIn } = useSelector((state) => state.auth);
+    console.log(userProfileData, "userProfileData in Authentication")
 
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                if (userToken) {
-
-                    const headers = {
-                        'Authorization': `Bearer ${userToken}`,
-                        "Access-Control-Allow-Origin": "*",
-                        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
-                    };
-                    const response = await axios.get('http://localhost:7173/api/v1/profiles/me', { headers });
-                    setProfile(response.data)
-                } else {
-                    navigate("/")
-                }
+                // Make a POST request to create a new profile
+                const headers = {
+                    'Authorization': `Bearer ${userToken}`,
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+                };
+                const response = await axios.get('http://localhost:7173/api/v1/profiles/me', { headers });
+                setFetchedProfile(response.data)
+                // dispatch(profilleInfoRegister(fetchedProfile))
             } catch (error) {
                 console.log(error);
             }
@@ -57,7 +54,9 @@ const Auth = () => {
 
         fetchUserProfile();
 
-    }, [userToken]);
+    }, [fetchedProfile]);
+
+    console.log(fetchedProfile, "profile in Auth");
 
     useEffect(() => {
         // Check if the mode is stored in localStorage
@@ -151,6 +150,7 @@ const Auth = () => {
         });
     };
 
+    // console.log(profile.user, "profile user role in Auth:")
     const handleLoginSubmit = async (e) => {
         e.preventDefault();
         const newLoginData = {
@@ -159,12 +159,17 @@ const Auth = () => {
         };
 
         setRegisterData(newLoginData);
+
         try {
-            console.log(newLoginData);
+            console.log(newLoginData, "newLoginData");
             await dispatch(login(newLoginData));
-            if (profile === null || typeof profile === 'undefined') {
+            if (isLoggedIn && fetchedProfile === null || isLoggedIn && typeof fetchedProfile === 'undefined') {
                 navigate("/enter-personal-details");
-            } else {
+            }
+            // else if (fetchedProfile?.user?.role !== 'User') {
+            //     navigate("/admin-dashboard")
+            // }
+            else {
                 navigate("/home");
             }
         } catch (error) {
@@ -175,7 +180,15 @@ const Auth = () => {
             password: "",
         });
     };
-
+    // useEffect(() => {
+    //     if (isLoggedIn && userProfileData) {
+    //         if (userProfileData.user.role !== 'User') {
+    //             navigate("/admin-dashboard");
+    //         } else {
+    //             navigate("/home");
+    //         }
+    //     }
+    // }, [isLoggedIn, userProfileData, navigate]);
 
     return (
         <>

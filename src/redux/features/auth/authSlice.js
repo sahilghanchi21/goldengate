@@ -7,7 +7,9 @@ const initialState = {
   user: null,
   userData: null,
   profileDetails: null,
+  userPost: null,
   userProfileData: null,
+  profileSkills: null,
   userProfileImage: null,
   userBackgroundImage: null,
   userPersonalInfo: null,
@@ -223,6 +225,12 @@ const authSlice = createSlice({
     profilleInfoRegister(state, action) {
       state.userPersonalInfo = action.payload;
     },
+    userPosts(state, action) {
+      state.userPost = action.payload;
+    },
+    profileSkills(state, action) {
+      state.profileSkills = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -397,6 +405,8 @@ export const { beforeLogin, beforeRegister, fullName, job, location } =
 export const {
   RESET_AUTH,
   profilleInfoRegister,
+  userPosts,
+  profileSkills,
   registerAvatar,
   profilleImageRegister,
 } = authSlice.actions;

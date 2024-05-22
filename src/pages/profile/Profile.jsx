@@ -7,27 +7,23 @@ import { IoMdLogOut } from 'react-icons/io';
 import { clearUserData, fetchProfileDetailsById, fetchUserDetailsById, logout, profilleInfoRegister } from '../../redux/features/auth/authSlice';
 import Skill from './skills/Skill';
 import axios from 'axios';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import UserPosts from '../../components/userPosts/UserPosts';
 
 const Profile = () => {
     const user = useSelector((state) => state.auth.user);
-    // const profile = useSelector((state) => state.auth.userProfileData.data || state.auth.userProfileData);
-    const [fetchedProfile, setFetchedProfile] = useState(null); // State to store fetched profile
-    console.log(fetchedProfile, "fetchedProfile")
+    const [fetchedProfile, setFetchedProfile] = useState(null);
+    const [fetchedPosts, setFetchedPosts] = useState(null);
+    const [fetchedSkills, setFetchedSkills] = useState(null);
     const userToken = useSelector((state) => state.auth.user.token);
-    console.log(userToken, "userToken")
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    // useEffect(() => {
-    //     if (userId) {
-    //         dispatch(fetchUserDetailsById(userId));
-    //     }
-    // }, [dispatch, userId]);
 
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                // Make a POST request to create a new profile
                 const headers = {
                     'Authorization': `Bearer ${userToken}`,
                     "Access-Control-Allow-Origin": "*",
@@ -35,33 +31,59 @@ const Profile = () => {
                 };
                 const response = await axios.get('http://localhost:7173/api/v1/profiles/me', { headers });
                 setFetchedProfile(response.data)
-                dispatch(profilleInfoRegister(fetchedProfile))
+                dispatch(profilleInfoRegister(response.data))
             } catch (error) {
                 console.log(error);
             }
         };
-
         fetchUserProfile();
+    }, []);
 
+    useEffect(() => {
+        const fetchUserPosts = async () => {
+            try {
+                const headers = {
+                    'Authorization': `Bearer ${userToken}`,
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+                };
+                const response = await axios.get('http://localhost:7173/api/v1/postRequest/me', { headers });
+                setFetchedPosts(response.data)
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchUserPosts();
+    }, []);
+
+    console.log(fetchedPosts, "post")
+
+    useEffect(() => {
+        const fetchUserSkill = async () => {
+            try {
+                const headers = {
+                    'Authorization': `Bearer ${userToken}`,
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+                };
+                const response = await axios.get('http://localhost:7173/api/v1/userskills/me', { headers });
+                setFetchedSkills(response.data)
+                dispatch(profilleInfoRegister(response.data))
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchUserSkill();
     }, []);
 
     const handleLogOut = async () => {
         try {
             dispatch(clearUserData())
-            // const userData = {
-            //     sessionToken: user.sessionToken,
-            // };
-            // await dispatch(logout(userData));
-            // // dispatch(clearUserData());
             navigate('/');
         } catch (error) {
             console.error("Failed to log out:", error);
         }
     };
-
-    const userDetails = useSelector((state) => state.auth.user);
-
-    // console.log("Profile details:", profile); // Log profile details to console
 
     return (
         <Layout>
@@ -90,10 +112,13 @@ const Profile = () => {
                     </div>
                 </section>
                 <section>
-                    <Skill />
+                    <Skill fetchedSkills={fetchedSkills} />
                 </section>
-            </div>
-        </Layout>
+                <section className='posts-container'>
+                    <UserPosts fetchedPosts={fetchedPosts} />
+                </section>
+            </div >
+        </Layout >
     );
 };
 

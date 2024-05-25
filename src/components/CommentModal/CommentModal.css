@@ -1,0 +1,81 @@
+.comment-modal-overlay {
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.comment-modal {
+    width: 80%;
+    max-width: 800px;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+}
+
+.comment-modal-content {
+    display: flex;
+    width: 100%;
+}
+
+.comment-modal-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.comment-modal-left .profile-pic {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.comment-modal-left input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.comment-modal-left button {
+    padding: 10px;
+    background-color: blue;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.comment-modal-right {
+    flex: 2;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 0 20px;
+}
+
+.comment {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.comment-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.comment-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.comment-username {
+    font-weight: bold;
+}
+
+.comment-content {
+    margin-top: 5px;
+}

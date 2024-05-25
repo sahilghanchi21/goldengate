@@ -15,6 +15,8 @@ export const AppRoutes = {
   // PROFILE: "/profile",
   LOGIN: "/login",
 
-
-  ADMIN:"/admin-dashboard"
+  ADMIN: "/admin-dashboard",
+  ADMINMANAGEPROFILES: "/admin-profiles",
+  ADMINSETTINGS: "/admin-settings",
+  EDITUSER: "/edit-user",
 };

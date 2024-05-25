@@ -14,7 +14,11 @@ import Business from "../pages/business/Business";
 import Profile from "../pages/profile/Profile";
 import GeminiChat from "../components/gemini";
 import ProtectedRoute from "./ProtectedRoute";
-import Admin from "../admin";
+import Admin from "../admin/Admin";
+import ManageProfiles from "../admin/pages/ManageProfiles";
+import AdminSettings from "../admin/pages/AdminSettings";
+import AdminDashboard from "../admin/pages/AdminDashboard";
+import EditUser from "../admin/pages/EditUser";
 const CustomRoutes = () => {
   return (
     <Routes>
@@ -31,7 +35,31 @@ const CustomRoutes = () => {
         path={AppRoutes.ADMIN}
         element={
           <ProtectedRoute>
-            <Admin title="Admin-Dashboard" />
+            <AdminDashboard title="Admin-Dashboard" />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path={AppRoutes.ADMINMANAGEPROFILES}
+        element={
+          <ProtectedRoute>
+            <ManageProfiles title="Admin-profiles" />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path={AppRoutes.ADMINSETTINGS}
+        element={
+          <ProtectedRoute>
+            <AdminSettings title="Admin-settings" />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path={AppRoutes.EDITUSER}
+        element={
+          <ProtectedRoute>
+            <EditUser title="Edit-User-Page" />
           </ProtectedRoute>
         }
       />

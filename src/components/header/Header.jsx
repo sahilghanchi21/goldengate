@@ -109,9 +109,8 @@ const Header = () => {
                     <ul className="nav-links">
                         <li><Link to="/home" className={`nav-link ${activeLink === 'home' ? 'active' : ''}`} onClick={() => handleLinkClick('home')}>Home</Link></li>
                         <li><Link to="/my-network" className={`nav-link ${activeLink === 'network' ? 'active' : ''}`} onClick={() => handleLinkClick('network')}>My Network</Link></li>
-                        <li><Link to="/messaging" className={`nav-link ${activeLink === 'messaging' ? 'active' : ''}`} onClick={() => handleLinkClick('messaging')}>Messaging</Link></li>
-                        <li><Link to="/notifications" className={`nav-link ${activeLink === 'notifications' ? 'active' : ''}`} onClick={() => handleLinkClick('notifications')}>Notifications</Link></li>
-                        <li><Link to="/for-business" className={`nav-link ${activeLink === 'ForBusiness' ? 'active' : ''}`} onClick={() => handleLinkClick('ForBusiness')}>For Business</Link></li>
+                       
+                        <li><Link to="/for-business" className={`nav-link ${activeLink === 'ForBusiness' ? 'active' : ''}`} onClick={() => handleLinkClick('ForBusiness')}>About US</Link></li>
                         {/* <li><Link to={`/profile/${user.userId}`} className={`nav-link ${activeLink === 'ForBusiness' ? 'active' : ''}`} onClick={() => handleLinkClick('ForBusiness')}>Profile</Link></li> */}
 
                     </ul>

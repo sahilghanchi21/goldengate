@@ -204,6 +204,8 @@ const authSlice = createSlice({
       // Clear user data when this action is dispatched
       state.isLoggedIn = false;
       state.user = null;
+      state.userPersonalInfo = null;
+      state.profileSkills = null;
       // state.userData = null;
       // state.userProfileData = null;
       // state.userProfileImage = null;

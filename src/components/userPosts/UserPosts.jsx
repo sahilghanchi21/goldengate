@@ -2,16 +2,40 @@
 
 // import React, { useState, useEffect } from 'react';
 // import { MdMoreHoriz } from "react-icons/md";
-// import { BiSolidLike, BiLike } from "react-icons/bi";
-// import { BiSolidCommentDetail } from "react-icons/bi";
+// import { BiSolidLike, BiLike, BiSolidCommentDetail } from "react-icons/bi";
 // import Slider from 'react-slick';
 // import axios from 'axios';
-// import { useSelector } from 'react-redux';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { useNavigate } from 'react-router-dom';
+// import { profilleInfoRegister } from '../../redux/features/auth/authSlice';
 
 // const UserPosts = ({ fetchedPosts = [] }) => {
-//     const [showFullCaption, setShowFullCaption] = useState(false);
+//     const [showFullCaption, setShowFullCaption] = useState({});
 //     const [postLikesStatuses, setPostLikesStatuses] = useState({});
+//     const [commentTexts, setCommentTexts] = useState({});
+//     const [comments, setComments] = useState({});
+//     const [showAllComments, setShowAllComments] = useState({});
+//     const [fetchedProfile, setFetchedProfile] = useState(null);
 //     const userToken = useSelector((state) => state.auth.user?.token);
+//     const dispatch = useDispatch();
+//     const navigate = useNavigate();
+//     useEffect(() => {
+//         const fetchUserProfile = async () => {
+//             try {
+//                 const headers = {
+//                     'Authorization': `Bearer ${userToken}`,
+//                     "Access-Control-Allow-Origin": "*",
+//                     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+//                 };
+//                 const response = await axios.get('http://localhost:7173/api/v1/profiles/me', { headers });
+//                 setFetchedProfile(response.data)
+//                 dispatch(profilleInfoRegister(response.data))
+//             } catch (error) {
+//                 console.log(error);
+//             }
+//         };
+//         fetchUserProfile();
+//     }, []);
 
 //     useEffect(() => {
 //         if (fetchedPosts) {
@@ -24,8 +48,21 @@
 //         }
 //     }, [fetchedPosts]);
 
-//     const toggleCaption = () => {
-//         setShowFullCaption(!showFullCaption);
+//     useEffect(() => {
+//         const fetchAllComments = async () => {
+//             for (let post of fetchedPosts) {
+//                 await fetchComments(post.postId);
+//             }
+//         };
+
+//         fetchAllComments();
+//     }, [fetchedPosts]);
+
+//     const toggleCaption = (postId) => {
+//         setShowFullCaption((prev) => ({
+//             ...prev,
+//             [postId]: !prev[postId]
+//         }));
 //     };
 
 //     const handlePostLiked = async (postId) => {
@@ -50,27 +87,6 @@
 //         }
 //     };
 
-//     // const handlePostUnLiked = async (postId) => {
-//     //     const newLikesStatus = !postLikesStatuses[postId];
-
-//     //     try {
-//     //         const headers = {
-//     //             'Authorization': `Bearer ${userToken}`,
-//     //             "Content-Type": "application/json"
-//     //         };
-
-//     //         await axios.delete(`http://localhost:7173/api/v1/postRequest/unlikeCount`, { postId }, { headers });
-
-//     //         setPostLikesStatuses({
-//     //             ...postLikesStatuses,
-//     //             [postId]: newLikesStatus
-//     //         });
-
-//     //         console.log(`Post ${postId} was unliked: ${newLikesStatus}`);
-//     //     } catch (error) {
-//     //         console.error("Error unliking post:", error);
-//     //     }
-//     // };
 //     const handlePostUnLiked = async (postId) => {
 //         const newLikesStatus = !postLikesStatuses[postId];
 
@@ -80,7 +96,6 @@
 //                 "Content-Type": "application/json"
 //             };
 
-//             // axios.delete does not support body directly, we use 'data' in config object
 //             await axios.delete(`http://localhost:7173/api/v1/postRequest/unlikeCount`, {
 //                 headers,
 //                 data: { postId }
@@ -97,14 +112,87 @@
 //         }
 //     };
 
+//     const handleCommentChange = (postId, event) => {
+//         setCommentTexts({
+//             ...commentTexts,
+//             [postId]: event.target.value
+//         });
+//     };
+
+//     const handleCommentSubmit = async (postId) => {
+//         const commentText = commentTexts[postId];
+//         if (!commentText) return;
+
+//         try {
+//             const headers = {
+//                 'Authorization': `Bearer ${userToken}`,
+//                 "Content-Type": "application/json"
+//             };
+
+//             const response = await axios.post(`http://localhost:7173/api/v1/postRequest/newComment`, {
+//                 content: commentText,
+//                 postId: postId
+//             }, { headers });
+
+//             setComments(prevComments => ({
+//                 ...prevComments,
+//                 [postId]: [...(prevComments[postId] || []), response.data]
+//             }));
+
+//             setCommentTexts({
+//                 ...commentTexts,
+//                 [postId]: ""
+//             });
+
+//             console.log(`Comment added to post ${postId}`);
+//         } catch (error) {
+//             console.error("Error adding comment:", error);
+//         }
+//     };
+
+//     const fetchComments = async (postId, page = 0, size = 10) => {
+//         try {
+//             const headers = {
+//                 'Authorization': `Bearer ${userToken}`,
+//                 "Content-Type": "application/json"
+//             };
+
+//             const response = await axios.get(`http://localhost:7173/api/v1/postRequest/${postId}/comments`, {
+//                 headers,
+//                 params: { page, size }
+//             });
+
+//             const fetchedComments = response.data.content;
+
+//             setComments(prevComments => ({
+//                 ...prevComments,
+//                 [postId]: fetchedComments
+//             }));
+
+//             console.log(`Comments fetched for post ${postId}:`, fetchedComments);
+//         } catch (error) {
+//             console.error("Error fetching comments:", error);
+//         }
+//     };
+
+//     const handleExpandComments = (postId) => {
+//         setShowAllComments((prev) => ({
+//             ...prev,
+//             [postId]: !prev[postId]
+//         }));
+//         fetchComments(postId);
+//     };
+
+//     console.log('Comments state:', comments);
+
 //     return (
 //         <div className="scrollable-posts">
 //             {fetchedPosts?.map(post => (
 //                 <div className="post-card" key={post.postId}>
 //                     <div className='post-card-header'>
 //                         <div className="post-user-info">
-//                             <img src={post.profilePic} alt="User Profile" className="profile-pic" />
-//                             <div className="username">{post.username}</div>
+//                             <img src={fetchedProfile?.avatar} alt="User Profile" className="profile-pic" />
+//                             <div className="username">{fetchedProfile?.fullName}</div>
 //                         </div>
 //                         <div className="more-post-options">
 //                             <MdMoreHoriz />
@@ -112,11 +200,12 @@
 //                     </div>
 //                     <div className="post-card-content">
 //                         <p className='caption-content'>
-//                             {!showFullCaption && post.content?.length > 100 ? post.content : `${post.content?.slice(0, 100)}...`}
+//                             {!showFullCaption[post.postId] && post.content?.length > 100 ? post.content.slice(0, 100) : post.content}
 //                             {post.content?.length > 100 &&
-//                                 (!showFullCaption ?
-//                                     <span style={{ cursor: "pointer", color: "blue" }} onClick={toggleCaption}> Show less</span> :
-//                                     <span style={{ cursor: "pointer", color: "blue" }} onClick={toggleCaption}> Show more...</span>)}
+//                                 <span style={{ cursor: "pointer", color: "blue" }} className="show-more" onClick={() => toggleCaption(post.postId)}>
+//                                     {showFullCaption[post.postId] ? ' Show less' : ' Show more...'}
+//                                 </span>
+//                             }
 //                         </p>
 //                         {post.video ? (
 //                             <video controls>
@@ -144,10 +233,34 @@
 //                                 {postLikesStatuses[post.postId] ?
 //                                     <BiSolidLike onClick={() => handlePostUnLiked(post.postId)} /> :
 //                                     <BiLike onClick={() => handlePostLiked(post.postId)} />}
-//                                 Likes
+                                
 //                             </div>
-//                             <div className='bottom-footer-icons'>{post.commentsCount} <BiSolidCommentDetail /> Comments</div>
+//                             <div className='bottom-footer-icons'>
+//                                 {post.commentsCount}
+//                                 <BiSolidCommentDetail onClick={() => handleExpandComments(post.postId)} /> 
+//                             </div>
+//                             <div>
+//                                 <input
+//                                     type="text"
+//                                     placeholder="Add a comment..."
+//                                     value={commentTexts[post.postId] || ""}
+//                                     onChange={(event) => handleCommentChange(post.postId, event)}
+//                                 />
+//                                 <button onClick={() => handleCommentSubmit(post.postId)}>Submit</button>
+//                             </div>
 //                         </div>
+//                         {showAllComments[post.postId] ? (
+//                             comments[post.postId]?.map((comment, idx) => (
+//                                 <div key={idx} className="comment">
+//                                     {comment.content}
+//                                 </div>
+//                             ))
+//                         ) : (
+//                             <div className="view-comments" onClick={() => handleExpandComments(post.postId)}>
+//                                 {post.commentsCount === 0 ? "" : ` View all ${post.commentsCount} comments`}
+
+//                             </div>
+//                         )}
 //                     </div>
 //                 </div>
 //             ))}
@@ -158,18 +271,45 @@
 // export default UserPosts;
 import React, { useState, useEffect } from 'react';
 import { MdMoreHoriz } from "react-icons/md";
-import { BiSolidLike, BiLike } from "react-icons/bi";
-import { BiSolidCommentDetail } from "react-icons/bi";
+import { BiSolidLike, BiLike, BiSolidCommentDetail } from "react-icons/bi";
 import Slider from 'react-slick';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { profilleInfoRegister } from '../../redux/features/auth/authSlice';
+import CommentModal from '../../components/CommentModal/CommentModal';
+import "../CommentModal/CommentModal.css"
 
 const UserPosts = ({ fetchedPosts = [] }) => {
-    const [showFullCaption, setShowFullCaption] = useState(false);
+    const [showFullCaption, setShowFullCaption] = useState({});
     const [postLikesStatuses, setPostLikesStatuses] = useState({});
-    const [commentText, setCommentText] = useState("");
+    const [commentTexts, setCommentTexts] = useState({});
     const [comments, setComments] = useState({});
+    const [showAllComments, setShowAllComments] = useState({});
+    const [fetchedProfile, setFetchedProfile] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentPost, setCurrentPost] = useState(null);
     const userToken = useSelector((state) => state.auth.user?.token);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                const headers = {
+                    'Authorization': `Bearer ${userToken}`,
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+                };
+                const response = await axios.get('http://localhost:7173/api/v1/profiles/me', { headers });
+                setFetchedProfile(response.data);
+                dispatch(profilleInfoRegister(response.data));
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchUserProfile();
+    }, [dispatch, userToken]);
 
     useEffect(() => {
         if (fetchedPosts) {
@@ -182,8 +322,21 @@ const UserPosts = ({ fetchedPosts = [] }) => {
         }
     }, [fetchedPosts]);
 
-    const toggleCaption = () => {
-        setShowFullCaption(!showFullCaption);
+    useEffect(() => {
+        const fetchAllComments = async () => {
+            for (let post of fetchedPosts) {
+                await fetchComments(post.postId);
+            }
+        };
+
+        fetchAllComments();
+    }, [fetchedPosts]);
+
+    const toggleCaption = (postId) => {
+        setShowFullCaption((prev) => ({
+            ...prev,
+            [postId]: !prev[postId]
+        }));
     };
 
     const handlePostLiked = async (postId) => {
@@ -233,11 +386,16 @@ const UserPosts = ({ fetchedPosts = [] }) => {
         }
     };
 
-    const handleCommentChange = (event) => {
-        setCommentText(event.target.value);
+    const handleCommentChange = (postId, event) => {
+        setCommentTexts({
+            ...commentTexts,
+            [postId]: event.target.value
+        });
     };
 
-    const handleCommentSubmit = async (postId) => {
+    const handleCommentSubmit = async (postId, commentText) => {
+        if (!commentText) return;
+
         try {
             const headers = {
                 'Authorization': `Bearer ${userToken}`,
@@ -246,21 +404,69 @@ const UserPosts = ({ fetchedPosts = [] }) => {
 
             const response = await axios.post(`http://localhost:7173/api/v1/postRequest/newComment`, {
                 content: commentText,
-                postId: postId,
-                userId: userToken // Assuming userId is derived from the token
+                postId: postId
             }, { headers });
 
-            setComments({
-                ...comments,
-                [postId]: [...(comments[postId] || []), response.data]
+            setComments(prevComments => ({
+                ...prevComments,
+                [postId]: [...(prevComments[postId] || []), response.data]
+            }));
+
+            setCommentTexts({
+                ...commentTexts,
+                [postId]: ""
             });
 
-            setCommentText("");
             console.log(`Comment added to post ${postId}`);
         } catch (error) {
             console.error("Error adding comment:", error);
         }
     };
+
+    const fetchComments = async (postId, page = 0, size = 10) => {
+        try {
+            const headers = {
+                'Authorization': `Bearer ${userToken}`,
+                "Content-Type": "application/json"
+            };
+
+            const response = await axios.get(`http://localhost:7173/api/v1/postRequest/${postId}/comments`, {
+                headers,
+                params: { page, size }
+            });
+
+            const fetchedComments = response.data.content;
+
+            setComments(prevComments => ({
+                ...prevComments,
+                [postId]: fetchedComments
+            }));
+
+            console.log(`Comments fetched for post ${postId}:`, fetchedComments);
+        } catch (error) {
+            console.error("Error fetching comments:", error);
+        }
+    };
+
+    const handleExpandComments = (postId) => {
+        setShowAllComments((prev) => ({
+            ...prev,
+            [postId]: !prev[postId]
+        }));
+        fetchComments(postId);
+    };
+
+    const openModal = (post) => {
+        setCurrentPost(post);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setCurrentPost(null);
+    };
+
+    console.log('Comments state:', comments);
 
     return (
         <div className="scrollable-posts">
@@ -268,8 +474,8 @@ const UserPosts = ({ fetchedPosts = [] }) => {
                 <div className="post-card" key={post.postId}>
                     <div className='post-card-header'>
                         <div className="post-user-info">
-                            <img src={post.profilePic} alt="User Profile" className="profile-pic" />
-                            <div className="username">{post.username}</div>
+                            <img src={fetchedProfile?.avatar} alt="User Profile" className="profile-pic" />
+                            <div className="username">{fetchedProfile?.fullName}</div>
                         </div>
                         <div className="more-post-options">
                             <MdMoreHoriz />
@@ -277,11 +483,12 @@ const UserPosts = ({ fetchedPosts = [] }) => {
                     </div>
                     <div className="post-card-content">
                         <p className='caption-content'>
-                            {!showFullCaption && post.content?.length > 100 ? post.content : `${post.content?.slice(0, 100)}...`}
+                            {!showFullCaption[post.postId] && post.content?.length > 100 ? post.content.slice(0, 100) : post.content}
                             {post.content?.length > 100 &&
-                                (!showFullCaption ?
-                                    <span style={{ cursor: "pointer", color: "blue" }} onClick={toggleCaption}> Show less</span> :
-                                    <span style={{ cursor: "pointer", color: "blue" }} onClick={toggleCaption}> Show more...</span>)}
+                                <span style={{ cursor: "pointer", color: "blue" }} className="show-more" onClick={() => toggleCaption(post.postId)}>
+                                    {showFullCaption[post.postId] ? ' Show less' : ' Show more...'}
+                                </span>
+                            }
                         </p>
                         {post.video ? (
                             <video controls>
@@ -309,27 +516,49 @@ const UserPosts = ({ fetchedPosts = [] }) => {
                                 {postLikesStatuses[post.postId] ?
                                     <BiSolidLike onClick={() => handlePostUnLiked(post.postId)} /> :
                                     <BiLike onClick={() => handlePostLiked(post.postId)} />}
-                                Likes
+                                
                             </div>
-                            <div className='bottom-footer-icons'>{post.commentsCount} <BiSolidCommentDetail /> Comments</div>
+                            <div className='bottom-footer-icons'>
+                                {post.commentsCount}
+                                <BiSolidCommentDetail onClick={() => openModal(post)} />
+                            </div>
                             <div>
                                 <input
                                     type="text"
                                     placeholder="Add a comment..."
-                                    value={commentText}
-                                    onChange={handleCommentChange}
+                                    value={commentTexts[post.postId] || ""}
+                                    onChange={(event) => handleCommentChange(post.postId, event)}
                                 />
                                 <button onClick={() => handleCommentSubmit(post.postId)}>Submit</button>
                             </div>
-                            {comments[post.postId]?.map((comment, idx) => (
+                        </div>
+                        {/* {showAllComments[post.postId] ? (
+                            comments[post.postId]?.map((comment, idx) => (
                                 <div key={idx} className="comment">
                                     {comment.content}
                                 </div>
-                            ))}
-                        </div>
+                            ))
+                        ) : (
+                            <div className="view-comments" onClick={() => handleExpandComments(post.postId)}>
+                                {post.commentsCount === 0 ? "" : ` View all ${post.commentsCount} comments`}
+
+                            </div>
+                        )} */}
                     </div>
                 </div>
             ))}
+            {currentPost && (
+                <CommentModal
+                    isOpen={isModalOpen}
+                    onRequestClose={closeModal}
+                    post={currentPost}
+                    comments={comments[currentPost.postId]}
+                    fetchedProfile={fetchedProfile}
+                    commentTexts={commentTexts}
+                    handleCommentChange={handleCommentChange}
+                    handleCommentSubmit={handleCommentSubmit}
+                />
+            )}
         </div>
     );
 };

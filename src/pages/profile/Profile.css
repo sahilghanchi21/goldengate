@@ -39,6 +39,14 @@
   top: 190px;
   left: 115px;
 }
+.profile-img-container-admin {
+  height: 180px;
+  width: 180px;
+  border-radius: 50%;
+  position: absolute;
+  top: 220px;
+  left: 350px;
+}
 
 @media (max-width: 768px) {
   .profile-img-container {
@@ -57,7 +65,12 @@
   border-radius: 50%;
   object-fit: cover;
 }
-
+.profile-img-admin {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
 .information-container {
   height: 50%;
   width: 100%;

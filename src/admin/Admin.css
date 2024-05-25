@@ -1,0 +1,27 @@
+/* Admin.css */
+.admin-container {
+    display: flex;
+  }
+  
+  .main-content {
+    margin-left: 250px; /* Same width as the sidebar */
+    padding: 20px;
+    flex-grow: 1;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logout-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .logout-btn {
+    margin-right: 10px;
+  }
+  

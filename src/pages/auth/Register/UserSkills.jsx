@@ -3,7 +3,7 @@ import "../Auth.css";
 import { IoIosRemoveCircle } from "react-icons/io";
 import { IoAddCircle } from "react-icons/io5";
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { profileSkills } from '../../../redux/features/auth/authSlice';
 
@@ -85,6 +85,7 @@ function UserSkills() {
 
     return (
         <div>
+            {/* <Link to={`/profiles/me/${user?.user?.userId}`}>back</Link> */}
             <div className='box-container'>
                 <form onSubmit={handleAddSkill}>
                     <p className='title'>Add User Skills</p>

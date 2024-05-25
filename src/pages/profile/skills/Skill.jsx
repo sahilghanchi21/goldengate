@@ -17,7 +17,7 @@ const Skill = ({ fetchedSkills }) => {
     console.log(fetchedSkills, "fetchedSkills")
     return (
         <div className='skill-main-container'>
-            <button>Back</button>
+        
             <div className="skill-tobar-container">
                 <div className='skills-heading'>
                     <p>Skills</p>
